@@ -141,7 +141,7 @@ public class Player : NetworkBehaviour
         transform.position = _spawnPoint.position;
         transform.rotation = _spawnPoint.rotation;
 
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.01f);//不太明白为什么要加
 
         SetupPlayer();
 
