@@ -35,22 +35,23 @@ public class JoinGame : MonoBehaviour
 
     public void RefreshRoomList()
     {
-        networkManager.matchMaker.ListMatches(0, 20, "", false, 0, 0, OnMatchList);
-        status.text = "Loading...";
+        ClearRoomList();
+        networkManager.matchMaker.ListMatches(0, 20, "", true, 0, 0, OnMatchList);
+        status.text = "Getting room list...";
     }
 
-    private void OnMatchList(bool success, string extendedInfo, List<MatchInfoSnapshot> responseData)
+    private void OnMatchList(bool success, string extendedInfo, List<MatchInfoSnapshot> matchList)
     {
         //throw new NotImplementedException();
         status.text = "";
-        if (!success)
+        if (!success || matchList==null)
         {
             status.text = "Couldn't get Room List";
             return;
         }
 
         ClearRoomList();
-        foreach (MatchInfoSnapshot item in responseData)
+        foreach (MatchInfoSnapshot item in matchList)
         {
             GameObject _roomListItemGO = Instantiate(roomListItemPrefab);
             _roomListItemGO.transform.SetParent(roomListParent);
@@ -60,7 +61,7 @@ public class JoinGame : MonoBehaviour
             {
                 _roomListItem.Setup(item, JoinRoom);
             }
-            //that will take care of setting up the name/amount of user
+
             //as well as setting up a callback function that will join the game.
 
             roomList.Add(_roomListItemGO);
@@ -84,10 +85,10 @@ public class JoinGame : MonoBehaviour
 
     public void JoinRoom(MatchInfoSnapshot _match)
     {
-        Debug.Log("Joining" + _match.name);
-        //networkManager.matchMaker.JoinMatch(_match.networkId, "", "", "", 0, 0, networkManager.OnMatchJoined);
-        //ClearRoomList();
-        //status.text = "JOINING....";
+        Debug.Log("Joining: " + _match.name);
+        networkManager.matchMaker.JoinMatch(_match.networkId, "", "", "", 0, 0, networkManager.OnMatchJoined);
+        ClearRoomList();
+        status.text = "JOINING....";
     }
 
 }

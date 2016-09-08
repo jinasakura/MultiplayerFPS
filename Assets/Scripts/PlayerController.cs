@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (PauseMenu.IsOn) return;
         //Setting target position for spring
         //This makes the physics act right when it comes to
         //applying gravity when flying over objects
